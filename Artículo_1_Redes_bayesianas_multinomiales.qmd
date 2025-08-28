@@ -1,9 +1,48 @@
 ---
 title: "Artículo 1: Redes bayesianas multinomiales"
 author: "Pedro Silva A01247217"
-format: html
-editor: visual
+format:
+   html:
+     toc: true
+     html-math-method: katex
+     embed-resources: true
+     self-contained-math: true
+     df-print: kable
+editor: source
 ---
 
 ## Artículo 1: Redes bayesianas multinomiales
+
+```{r}
+library(tidyverse)
+library(bnlearn)
+```
+
+```{r}
+# cargando datos de las base de datos de hogar
+hogar = read_csv("data/eod_2017/thogar_eod2017/conjunto_de_datos/thogar.csv")
+head(hogar)
+```
+```{r}
+# cargando datos de las base de datos de demografia
+dem = read_csv("data/eod_2017/tsdem_eod2017/conjunto_de_datos/tsdem.csv")
+head(dem)
+```
+```{r}
+# cargando datos de las base de datos de transporte 
+trans = read_csv("data/eod_2017/ttransporte_eod2017/conjunto_de_datos/ttransporte.csv")
+head(trans)
+```
+```{r}
+# cargando datos de las base de datos de viaje
+viaje = read_csv("data/eod_2017/tviaje_eod2017/conjunto_de_datos/tviaje.csv")
+head(viaje)
+```
+
+```{r}
+# cargando datos de las base de datos de vivienda
+vivienda = read_csv("data/eod_2017/tvivienda_eod2017/conjunto_de_datos/tvivienda.csv")
+head(vivienda)
+```
+
 
