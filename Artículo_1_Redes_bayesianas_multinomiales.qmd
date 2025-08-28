@@ -1,0 +1,9 @@
+---
+title: "Artículo 1: Redes bayesianas multinomiales"
+author: "Pedro Silva A01247217"
+format: html
+editor: visual
+---
+
+## Artículo 1: Redes bayesianas multinomiales
+
