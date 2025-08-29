@@ -13,26 +13,34 @@ editor: source
 
 ## Artículo 1: Redes bayesianas multinomiales
 
+# Librerias usadas
+
 ```{r}
 library(tidyverse)
 library(bnlearn)
 ```
+
+
+# Cargando bases de datos 
 
 ```{r}
 # cargando datos de las base de datos de hogar
 hogar = read_csv("data/eod_2017/thogar_eod2017/conjunto_de_datos/thogar.csv")
 head(hogar)
 ```
+
 ```{r}
 # cargando datos de las base de datos de demografia
 dem = read_csv("data/eod_2017/tsdem_eod2017/conjunto_de_datos/tsdem.csv")
 head(dem)
 ```
+
 ```{r}
 # cargando datos de las base de datos de transporte 
 trans = read_csv("data/eod_2017/ttransporte_eod2017/conjunto_de_datos/ttransporte.csv")
 head(trans)
 ```
+
 ```{r}
 # cargando datos de las base de datos de viaje
 viaje = read_csv("data/eod_2017/tviaje_eod2017/conjunto_de_datos/tviaje.csv")
@@ -45,4 +53,33 @@ vivienda = read_csv("data/eod_2017/tvivienda_eod2017/conjunto_de_datos/tvivienda
 head(vivienda)
 ```
 
+# Union bases de datos 
+
+```{r}
+# Cargar solo las variables necesarias de cada base de datos
+viaje <- read_csv("data/eod_2017/tviaje_eod2017/conjunto_de_datos/tviaje.csv") %>%
+  select(id_soc, id_via, p5_3, p5_6, p5_7_7, p5_14_01, p5_14_07, p5_14_14, p5_14_19, p5_14_20)
+
+dem <- read_csv("data/eod_2017/tsdem_eod2017/conjunto_de_datos/tsdem.csv") %>%
+  select(id_soc, sexo, edad, ent, niv)
+
+trans <- read_csv("data/eod_2017/ttransporte_eod2017/conjunto_de_datos/ttransporte.csv") %>%
+  select(id_via, p5_14)
+
+```
+
+```{r}
+# Unir las tablas: primero viaje con dem por id_soc, luego con trans por id_via
+base_final <- viaje %>%
+  left_join(dem, by = "id_soc") %>%
+  left_join(trans, by = "id_via")
+```
+
+```{r}
+# Opcional: visualizar la estructura de la base final
+glimpse(base_final)
+```
+```{r}
+head(base_final)
+```
 
