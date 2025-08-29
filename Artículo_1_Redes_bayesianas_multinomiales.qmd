@@ -70,7 +70,17 @@ dag_1
 
 DAG_2
 
+```{r}
+dag_2 = model2network("[sexo][edad][p5_3][ent][p5_6|ent][niv|sexo:edad][p5_7_7|p5_6][p5_14_01|p5_3:sexo:niv:p5_7_7][p5_14_07|p5_3:sexo:niv:p5_7_7][p5_14_12|p5_3:sexo:niv:p5_7_7][p5_14_14|p5_3:sexo:niv:p5_7_7][p5_14_19|p5_3:sexo:niv:p5_7_7][p5_14_20|p5_3:sexo:niv:p5_7_7]")
+```
 
+```{r}
+dev.new(width=12, height=8)  
+graphviz.plot(dag_2, shape = "ellipse")
+```
+```{r}
+dag_2
+```
 
 
 
