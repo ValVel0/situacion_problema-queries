@@ -43,3 +43,23 @@ base_final <- viaje %>%
 head(base_final)
 ```
 
+# Generando DAGS
+
+DAG1
+
+```{r}
+colnames(base_final) = c("id_soc", "p5_3", "p5_6", "p5_7_7", "p5_14_01", "p5_14_07", "p5_14_12", "p5_14_14", "p5_14_19", "p5_14_20", "sexo", "edad", "ent", "niv")
+```
+
+```{r}
+dag = model2network("[sexo][edad][niv][ent][p5_3|sexo:edad:niv][p5_6|sexo:edad:niv:ent][p5_7_7|sexo:edad:niv:ent][p5_14_01|p5_3:p5_6:p5_7_7][p5_14_07|p5_3:p5_6:p5_7_7][p5_14_12|p5_3:p5_6:p5_7_7][p5_14_14|p5_3:p5_6:p5_7_7][p5_14_19|p5_3:p5_6:p5_7_7][p5_14_20|p5_3:p5_6:p5_7_7]")
+```
+
+```{r}
+dev.new(width=12, height=8)  
+graphviz.plot(dag, shape = "ellipse")
+```
+```{r}
+dag
+```
+
