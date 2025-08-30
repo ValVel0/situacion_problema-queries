@@ -1,6 +1,6 @@
 ---
 title: "Artículo 1: Redes bayesianas multinomiales"
-author: "Pedro Silva A01247217"
+author: "Vidal López A01253568"
 format:
    html:
      toc: true
@@ -10,7 +10,7 @@ format:
      df-print: kable
 editor: source
 ---
-
+### a
 ## Artículo 1: Redes bayesianas multinomiales
 
 # Librerias usadas
@@ -26,13 +26,12 @@ library(bnlearn)
 ```{r}
 viaje <- read_csv("data/eod_2017/tviaje_eod2017/conjunto_de_datos/tviaje.csv") %>%
   select(id_soc, p5_3, p5_6, p5_7_7, p5_14_01, p5_14_07, p5_14_12, p5_14_14, p5_14_19, p5_14_20) %>%
-  mutate(across(where(is.character), as.factor))  # Convertir character a factor
+  mutate(across(everything(), as.factor))  # Convertir todo a factor
 
 dem <- read_csv("data/eod_2017/tsdem_eod2017/conjunto_de_datos/tsdem.csv") %>%
   select(id_soc, sexo, edad, ent, niv) %>%
-  mutate(across(where(is.character), as.factor))
+  mutate(across(everything(), as.factor))
 ```
-
 
 ```{r}
 # Unir las tablas por id_soc
@@ -43,10 +42,10 @@ base_final <- viaje %>%
 ```{r}
 head(base_final)
 ```
+
 ```{r}
 sum(is.na(base_final))
 ```
-
 
 # Generando DAGS
 
@@ -57,7 +56,59 @@ colnames(base_final) = c("id_soc", "p5_3", "p5_6", "p5_7_7", "p5_14_01", "p5_14_
 ```
 
 ```{r}
-dag_1 = model2network("[sexo][edad][niv][ent][p5_3|sexo:edad:niv][p5_6|sexo:edad:niv:ent][p5_7_7|sexo:edad:niv:ent][p5_14_01|p5_3:p5_6:p5_7_7][p5_14_07|p5_3:p5_6:p5_7_7][p5_14_12|p5_3:p5_6:p5_7_7][p5_14_14|p5_3:p5_6:p5_7_7][p5_14_19|p5_3:p5_6:p5_7_7][p5_14_20|p5_3:p5_6:p5_7_7]")
+dag_1 = empty.graph(nodes = c("sexo", "edad", "niv", "ent", "p5_3", "p5_6", "p5_7_7", 
+                             "p5_14_01", "p5_14_07", "p5_14_12", "p5_14_14", "p5_14_19", "p5_14_20"))
+
+arc_set = matrix(c(
+  'sexo', 'p5_3',
+  'edad', 'p5_3', 
+  'niv', 'p5_3',
+  
+  'sexo', 'p5_6',
+  'edad', 'p5_6',
+  'niv', 'p5_6',
+  'ent', 'p5_6',
+  
+  'sexo', 'p5_7_7',
+  'edad', 'p5_7_7',
+  'niv', 'p5_7_7',
+  'ent', 'p5_7_7',
+  
+  'p5_3', 'p5_14_01',
+  'p5_6', 'p5_14_01',
+  'p5_7_7', 'p5_14_01',
+  
+  'p5_3', 'p5_14_07',
+  'p5_6', 'p5_14_07',
+  'p5_7_7', 'p5_14_07',
+  
+  'p5_3', 'p5_14_12',
+  'p5_6', 'p5_14_12',
+  'p5_7_7', 'p5_14_12',
+  
+  'p5_3', 'p5_14_14',
+  'p5_6', 'p5_14_14',
+  'p5_7_7', 'p5_14_14',
+  
+  'p5_3', 'p5_14_19',
+  'p5_6', 'p5_14_19',
+  'p5_7_7', 'p5_14_19',
+  
+  'p5_3', 'p5_14_20',
+  'p5_6', 'p5_14_20',
+  'p5_7_7', 'p5_14_20'
+  
+), byrow = TRUE, ncol = 2,
+dimnames = list(NULL, c("from", "to")))
+
+print(arc_set)
+
+arcs(dag_1) = arc_set
+```
+
+```{r}
+# Verify the structure
+dag_1
 ```
 
 ```{r}
@@ -65,9 +116,11 @@ dev.new(width=12, height=8)
 graphviz.plot(dag_1, shape = "ellipse")
 ```
 ```{r}
-dag_1
+base_df <- as.data.frame(base_final[, -1]) %>%
+  mutate(across(where(is.factor), droplevels))
+score(dag_1, data = base_df, type = "bic")
+score(dag_1, data = base_df, type = "aic")
 ```
-
 DAG_2
 
 ```{r}
@@ -78,6 +131,7 @@ dag_2 = model2network("[sexo][edad][p5_3][ent][p5_6|ent][niv|sexo:edad][p5_7_7|p
 dev.new(width=12, height=8)  
 graphviz.plot(dag_2, shape = "ellipse")
 ```
+
 ```{r}
 dag_2
 ```
@@ -96,8 +150,11 @@ dag_3
 ```
 
 best_dag
+
 ```{r}
-best_dag = hc(base_final)
+base_df <- as.data.frame(base_final[, -1]) %>%
+  mutate(across(where(is.factor), droplevels))
+best_dag = hc(base_df)
 ```
 
 ```{r}
@@ -108,22 +165,30 @@ graphviz.plot(best_dag, shape = "ellipse")
 Scores de cada una de las DAGs
 
 ```{r}
-score(dag_1, data = base_final, type = "bic")
-score(dag_1, data = base_final, type = "aic")
+base_df <- as.data.frame(base_final[, -1]) %>%
+  mutate(across(where(is.factor), droplevels))
+score(dag_1, data = base_df, type = "bic")
+score(dag_1, data = base_df, type = "aic")
 ```
 
 ```{r}
-score(dag_2, data = base_final, type = "bic")
-score(dag_2, data = base_final, type = "aic")
+base_df <- as.data.frame(base_final[, -1]) %>%
+  mutate(across(where(is.factor), droplevels))
+score(dag_2, data = base_df, type = "bic")
+score(dag_2, data = base_df, type = "aic")
 ```
 
 ```{r}
-score(dag_3, data = base_final, type = "bic")
-score(dag_3, data = base_final, type = "aic")
+base_df <- as.data.frame(base_final[, -1]) %>%
+  mutate(across(where(is.factor), droplevels))
+score(dag_3, data = base_df, type = "bic")
+score(dag_3, data = base_df, type = "aic")
 ```
 
 ```{r}
-score(best_dag, data = base_final, type = "bic")
-score(best_dag, data = base_final, type = "aic")
+base_df <- as.data.frame(base_final[, -1]) %>%
+  mutate(across(where(is.factor), droplevels))
+score(best_dag, data = base_df, type = "bic")
+score(best_dag, data = base_df, type = "aic")
 ```
 
