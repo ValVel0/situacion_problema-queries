@@ -81,9 +81,10 @@ graphviz.plot(dag_2, shape = "ellipse")
 ```{r}
 dag_2
 ```
+DAG_3
 
 ```{r}
-dag_3 = model2network("[sexo][edad][ent][niv|sexo:edad:ent][p5_7_7|ent][p5_6|p5_7_7][p5_3|niv][p5_14_01|p5_3][p_14_07|p5_3][p_14_12|p_3][p_14_14|p_3][p_14_19|p_3][p_14_20|p_3]")
+dag_3 = model2network("[sexo][edad][ent][niv|sexo:edad:ent][p5_7_7|ent][p5_6|p5_7_7][p5_3|niv:p5_6][p5_14_01|p5_3][p_14_07|p5_3][p_14_12|p5_3][p_14_14|p5_3][p_14_19|p5_3][p_14_20|p5_3]")
 ```
 
 ```{r}
