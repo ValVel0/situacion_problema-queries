@@ -105,3 +105,25 @@ dev.new(width=12, height=8)
 graphviz.plot(best_dag, shape = "ellipse")
 ```
 
+Scores de cada una de las DAGs
+
+```{r}
+score(dag_1, data = base_final, type = "bic")
+score(dag_1, data = base_final, type = "aic")
+```
+
+```{r}
+score(dag_2, data = base_final, type = "bic")
+score(dag_2, data = base_final, type = "aic")
+```
+
+```{r}
+score(dag_3, data = base_final, type = "bic")
+score(dag_3, data = base_final, type = "aic")
+```
+
+```{r}
+score(best_dag, data = base_final, type = "bic")
+score(best_dag, data = base_final, type = "aic")
+```
+
