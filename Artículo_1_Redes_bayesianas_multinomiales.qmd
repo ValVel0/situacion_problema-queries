@@ -10,7 +10,7 @@ format:
      df-print: kable
 editor: source
 ---
-### a
+
 ## Artículo 1: Redes bayesianas multinomiales
 
 # Librerias usadas
@@ -20,6 +20,9 @@ library(tidyverse)
 library(bnlearn)
 ```
 
+```{r}
+getwd()
+```
 
 # Cargando y creando la base de datos optima
 
@@ -111,16 +114,7 @@ arcs(dag_1) = arc_set
 dag_1
 ```
 
-```{r}
-dev.new(width=12, height=8)  
-graphviz.plot(dag_1, shape = "ellipse")
-```
-```{r}
-base_df <- as.data.frame(base_final[, -1]) %>%
-  mutate(across(where(is.factor), droplevels))
-score(dag_1, data = base_df, type = "bic")
-score(dag_1, data = base_df, type = "aic")
-```
+
 DAG_2
 
 ```{r}
@@ -138,7 +132,7 @@ dag_2
 DAG_3
 
 ```{r}
-dag_3 = model2network("[sexo][edad][ent][niv|sexo:edad:ent][p5_7_7|ent][p5_6|p5_7_7][p5_3|niv:p5_6][p5_14_01|p5_3][p_14_07|p5_3][p_14_12|p5_3][p_14_14|p5_3][p_14_19|p5_3][p_14_20|p5_3]")
+dag_3 = model2network("[sexo][edad][ent][niv|sexo:edad:ent][p5_7_7|ent][p5_6|p5_7_7][p5_3|niv:p5_6][p5_14_01|p5_3][p5_14_07|p5_3][p5_14_12|p5_3][p5_14_14|p5_3][p5_14_19|p5_3][p5_14_20|p5_3]")
 ```
 
 ```{r}
@@ -155,6 +149,10 @@ best_dag
 base_df <- as.data.frame(base_final[, -1]) %>%
   mutate(across(where(is.factor), droplevels))
 best_dag = hc(base_df)
+```
+
+```{r}
+best_dag
 ```
 
 ```{r}
