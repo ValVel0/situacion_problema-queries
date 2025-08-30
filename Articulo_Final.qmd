@@ -1,0 +1,53 @@
+---
+title: "Artículo 1 - Redes Bayesianas multinomiales"
+author:
+  - name: "Nombre Apellido"
+    affiliation: "1"
+  - name: "Nombre Apellido"
+    affiliation: "1"
+  - name: "Nombre Apellido"
+    affiliation: "1"
+  - name: "Nombre Apellido"
+    affiliation: "1"
+affiliation:
+  - id: "1"
+    institution: "Instituto Tecnológico de Estudios Superiores de Monterrey"
+date: "Ponemos el día"
+abstract: |
+  Aquí  escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección)
+keywords: [palabra1, palabra2, palabra3]
+
+#HTML y PDF
+format:
+  html:
+    toc: true
+    number-sections: true
+    code-fold: true
+    theme: lumen
+  pdf:
+    documentclass: article
+    toc: true
+    number-sections: true
+    latex-engine: xelatex
+    #classoption: twocolumn #esto es para las dos columnas
+    keep-tex: false
+execute:
+  echo: true
+  warning: false
+  error: false
+---
+
+
+# Primero
+
+Texto de más texto Texto de más texto Texto de más texto Texto de más texto Texto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más texto.
+
+
+
+Texto en dos columnas.Texto de más texto Texto de más texto Texto de más texto Texto de más texto Texto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más texto.
+
+
+
+Texto de más texto Texto de más texto Texto de más texto Texto de más texto Texto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más texto
+
+# Segunda sección
