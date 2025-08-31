@@ -44,8 +44,13 @@ base_final = viaje %>%
 
 ```{r}
 head(base_final)
+
+# Guardamos el head
+head_df = head(base_final)
+saveRDS(head_df, "objetos/head_base_final.rds")
 ```
 
+Verificamos que no contenan valores nulos la base de datos.
 ```{r}
 sum(is.na(base_final))
 ```
@@ -113,6 +118,18 @@ arcs(dag_1) = arc_set
 # Verify the structure
 dag_1
 ```
+```{r}
+dev.new(width=12, height=8)  
+graphviz.plot(dag_1, shape = "ellipse")
+```
+
+```{r}
+# guardamos la imagen
+png("figures/diagrama_dag1.png", width = 1200, height = 800, res = 150)
+graphviz.plot(dag_1, shape = "ellipse")
+dev.off()
+```
+
 
 #### DAG_2
 
@@ -124,6 +141,14 @@ dag_2 = model2network("[sexo][edad][p5_3][ent][p5_6|ent][niv|sexo:edad][p5_7_7|p
 dev.new(width=12, height=8)  
 graphviz.plot(dag_2, shape = "ellipse")
 ```
+
+```{r}
+# guardamos la imagen
+png("figures/diagrama_dag2.png", width = 1200, height = 800, res = 150)
+graphviz.plot(dag_2, shape = "ellipse")
+dev.off()
+```
+
 
 ```{r}
 dag_2
@@ -139,6 +164,14 @@ dag_3 = model2network("[sexo][edad][ent][niv|sexo:edad:ent][p5_7_7|ent][p5_6|p5_
 dev.new(width=12, height=8)  
 graphviz.plot(dag_3, shape = "ellipse")
 ```
+
+```{r}
+# guardamos la imagen
+png("figures/diagrama_dag3.png", width = 1200, height = 800, res = 150)
+graphviz.plot(dag_3, shape = "ellipse")
+dev.off()
+```
+
 
 ```{r}
 dag_3
@@ -163,6 +196,13 @@ Visualizamos la DAG.
 ```{r}
 dev.new(width=12, height=8)  
 graphviz.plot(best_dag, shape = "ellipse")
+```
+
+```{r}
+# guardamos la imagen
+png("figures/diagrama_best_dag.png", width = 1200, height = 800, res = 150)
+graphviz.plot(best_dag, shape = "ellipse")
+dev.off()
 ```
 
 Se puede observar que existen algunas relacionas de dependencia *extrañas* o que no suenan lógicas: como es que el sexo de una persona dependa de p5_14_14 (caminar como medio de transporte) o que la edad dependa de p5_6 (origen del viaje).
@@ -198,40 +238,72 @@ bl = data.frame(
 ```
 
 ```{r}
-dag_restricted = hc(base_df, score = "bic", blacklist = bl)
+dag_restricted_0 = hc(base_df, score = "bic", blacklist = bl)
 
-dag_restricted
+dag_restricted_0
 ```
 
 Visualizamos la DAG con restricciones:
 
 ```{r}
 dev.new(width=12, height=8)  
-graphviz.plot(dag_restricted, shape = "ellipse")
+graphviz.plot(dag_restricted_0, shape = "ellipse")
 ```
+
+```{r}
+# guardamos la imagen
+png("figures/diagrama_dag_restricted_0.png", width = 1200, height = 800, res = 150)
+graphviz.plot(dag_restricted_0, shape = "ellipse")
+dev.off()
+```
+
 
 Que el sexo dependa del nivel educativo es una relación con no tanta coherencia fuera del algoritmo. Por ello, eliminamos este arco y evaluamos qué tan bueno fue el modelo con posteriores pruebas de hipótesis y con los estadísticos BIC y AIC.
 
 ```{r}
 # eliminamos la relción de nivel educativo con sexo
-dag_restricted = drop.arc(dag_restricted, from = "niv", to = "sexo")
+dag_restricted = drop.arc(dag_restricted_0, from = "niv", to = "sexo")
 #arcs(best_dag)
 graphviz.plot(dag_restricted, shape = "ellipse")
 ```
 
+```{r}
+# guardamos la imagen
+png("figures/diagrama_dag_restricted.png", width = 1200, height = 800, res = 150)
+graphviz.plot(dag_restricted, shape = "ellipse")
+dev.off()
+```
+
+
 ### Pruebas de hipótesis sobre nodos y dependencias
 
 ```{r}
-arc.strength(dag_3, data = base_df, criterion = "mi")
+prueba_strength_dag3 = arc.strength(dag_3, data = base_df, criterion = "mi")
+
+# Guardamos prueba
+saveRDS(prueba_strength_dag3, "objetos/prueba_strength_dag3.rds")
+
+prueba_strength_dag3
 ```
 
 ```{r}
-arc.strength(best_dag, data = base_df, criterion = "mi")
+prueba_strength_best_dag = arc.strength(best_dag, data = base_df, criterion = "mi")
+
+# Guardamos prueba
+saveRDS(prueba_strength_best_dag, "objetos/prueba_strength_best_dag.rds")
+
+prueba_strength_best_dag
 ```
 
 ```{r}
 # ci.test("sexo", "niv", test = "mi", data = base_df)
-arc.strength(dag_restricted, data = base_df, criterion = "mi")
+prueba_strength_restricted= arc.strength(dag_restricted, data = base_df, criterion = "mi")
+
+# Guardamos la prueba:
+# Guardamos prueba
+saveRDS(prueba_strength_restricted, "objetos/prueba_prueba_strength_restricted.rds")
+
+prueba_strength_restricted
 ```
 
 Realizamos una prueba de hipótesis para verificar si existen dependencia entre los nodos de la DAG con restricciones.
@@ -251,6 +323,8 @@ resultados[["p5_14_01_to_p5_14_07"]] = ci.test(x="p5_14_01",y="p5_14_07",z=setdi
 
 ### --- Verificamos las pruebas de hipótesis con el p-value --- ###
 # resultados
+
+saveRDS(resultados, "objetos/resultados_p_hipótesis.rds")
 ```
 
 Con esto confirmamos que $\text{p-value} < 0.05$ para cada caso de los arcos, de manera que se rechaza la hipótesis nula $H_0$ y existe suficiente evidencia estadística para afirmar que las relaciones de dependencia entre los nodos de la DAG con restricciones son significativas.
