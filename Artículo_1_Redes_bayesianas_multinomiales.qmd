@@ -301,7 +301,7 @@ prueba_strength_restricted= arc.strength(dag_restricted, data = base_df, criteri
 
 # Guardamos la prueba:
 # Guardamos prueba
-saveRDS(prueba_strength_restricted, "objetos/prueba_prueba_strength_restricted.rds")
+saveRDS(prueba_strength_restricted, "objetos/prueba_strength_restricted.rds")
 
 prueba_strength_restricted
 ```
