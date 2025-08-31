@@ -27,18 +27,18 @@ getwd()
 # Cargando y creando la base de datos optima
 
 ```{r}
-viaje <- read_csv("data/eod_2017/tviaje_eod2017/conjunto_de_datos/tviaje.csv") %>%
+viaje = read_csv("data/eod_2017/tviaje_eod2017/conjunto_de_datos/tviaje.csv") %>%
   select(id_soc, p5_3, p5_6, p5_7_7, p5_14_01, p5_14_07, p5_14_12, p5_14_14, p5_14_19, p5_14_20) %>%
   mutate(across(everything(), as.factor))  # Convertir todo a factor
 
-dem <- read_csv("data/eod_2017/tsdem_eod2017/conjunto_de_datos/tsdem.csv") %>%
+dem = read_csv("data/eod_2017/tsdem_eod2017/conjunto_de_datos/tsdem.csv") %>%
   select(id_soc, sexo, edad, ent, niv) %>%
   mutate(across(everything(), as.factor))
 ```
 
 ```{r}
 # Unir las tablas por id_soc
-base_final <- viaje %>%
+base_final = viaje %>%
   left_join(dem, by = "id_soc")
 ```
 
@@ -52,7 +52,7 @@ sum(is.na(base_final))
 
 # Generando DAGS
 
-DAG_1
+#### DAG_1
 
 ```{r}
 colnames(base_final) = c("id_soc", "p5_3", "p5_6", "p5_7_7", "p5_14_01", "p5_14_07", "p5_14_12", "p5_14_14", "p5_14_19", "p5_14_20", "sexo", "edad", "ent", "niv")
@@ -114,8 +114,7 @@ arcs(dag_1) = arc_set
 dag_1
 ```
 
-
-DAG_2
+#### DAG_2
 
 ```{r}
 dag_2 = model2network("[sexo][edad][p5_3][ent][p5_6|ent][niv|sexo:edad][p5_7_7|p5_6][p5_14_01|p5_3:sexo:niv:p5_7_7][p5_14_07|p5_3:sexo:niv:p5_7_7][p5_14_12|p5_3:sexo:niv:p5_7_7][p5_14_14|p5_3:sexo:niv:p5_7_7][p5_14_19|p5_3:sexo:niv:p5_7_7][p5_14_20|p5_3:sexo:niv:p5_7_7]")
@@ -129,7 +128,8 @@ graphviz.plot(dag_2, shape = "ellipse")
 ```{r}
 dag_2
 ```
-DAG_3
+
+#### DAG_3
 
 ```{r}
 dag_3 = model2network("[sexo][edad][ent][niv|sexo:edad:ent][p5_7_7|ent][p5_6|p5_7_7][p5_3|niv:p5_6][p5_14_01|p5_3][p5_14_07|p5_3][p5_14_12|p5_3][p5_14_14|p5_3][p5_14_19|p5_3][p5_14_20|p5_3]")
@@ -139,14 +139,17 @@ dag_3 = model2network("[sexo][edad][ent][niv|sexo:edad:ent][p5_7_7|ent][p5_6|p5_
 dev.new(width=12, height=8)  
 graphviz.plot(dag_3, shape = "ellipse")
 ```
+
 ```{r}
 dag_3
 ```
 
-best_dag
+### best_dag
+
+Por medio del algoritmo hill climbing (HC) buscamos el **máximo local**, que representa la mejor DAG con los datos y variables seleccionados.
 
 ```{r}
-base_df <- as.data.frame(base_final[, -1]) %>%
+base_df = as.data.frame(base_final[, -1]) %>%
   mutate(across(where(is.factor), droplevels))
 best_dag = hc(base_df)
 ```
@@ -155,38 +158,146 @@ best_dag = hc(base_df)
 best_dag
 ```
 
+Visualizamos la DAG.
+
 ```{r}
 dev.new(width=12, height=8)  
 graphviz.plot(best_dag, shape = "ellipse")
 ```
 
-Scores de cada una de las DAGs
+Se puede observar que existen algunas relacionas de dependencia *extrañas* o que no suenan lógicas: como es que el sexo de una persona dependa de p5_14_14 (caminar como medio de transporte) o que la edad dependa de p5_6 (origen del viaje).
+
+Para resolver esto, probaremos hacer restricciones al algoritmo, de modo que el conjunto de DAG's enlistadas no puedan ser candidatas.
+
+Tomaremos como criterio que los nodos enlistados siempre serán padres:
+
+-   sexo: sexo de la persona.
+-   p5_3: viaje entre fin de semana o entre semana.
+-   Ent: entidad federativa.
+-   Edad: edad de la persona.
+
+Los demás nodos podrán, según el algorimo HC, intercalarse para obtener nuevas relaciones de dependencia.
+
+Creamos la nueva DAG con restricciones:
 
 ```{r}
-base_df <- as.data.frame(base_final[, -1]) %>%
+fixed_parents = c("p5_3", "sexo", "edad", "ent")
+all_nodes = c("p5_3", "sexo", "edad", "ent",
+              "p5_6","p5_7_7",
+               "p5_14_01","p5_14_07","p5_14_12",
+               "p5_14_14","p5_14_19","p5_14_20")
+#creamos una blacklist para prohibir
+bl = data.frame(
+  from = rep(all_nodes, each = length(fixed_parents)),
+  to = rep(fixed_parents, times = length(all_nodes))
+)
+
+#permitimos que los padres tengan aristas entre ellos
+#bl = bl[! (bl$from %in% fixed_parents & bl$to %in% fixed_parents), ]
+
+```
+
+```{r}
+dag_restricted = hc(base_df, score = "bic", blacklist = bl)
+
+dag_restricted
+```
+
+Visualizamos la DAG con restricciones:
+
+```{r}
+dev.new(width=12, height=8)  
+graphviz.plot(dag_restricted, shape = "ellipse")
+```
+
+Que el sexo dependa del nivel educativo es una relación con no tanta coherencia fuera del algoritmo. Por ello, eliminamos este arco y evaluamos qué tan bueno fue el modelo con posteriores pruebas de hipótesis y con los estadísticos BIC y AIC.
+
+```{r}
+# eliminamos la relción de nivel educativo con sexo
+dag_restricted = drop.arc(dag_restricted, from = "niv", to = "sexo")
+#arcs(best_dag)
+graphviz.plot(dag_restricted, shape = "ellipse")
+```
+
+### Pruebas de hipótesis sobre nodos y dependencias
+
+```{r}
+arc.strength(dag_3, data = base_df, criterion = "mi")
+```
+
+
+```{r}
+arc.strength(best_dag, data = base_df, criterion = "mi")
+```
+
+```{r}
+# ci.test("sexo", "niv", test = "mi", data = base_df)
+arc.strength(dag_restricted, data = base_df, criterion = "mi")
+```
+
+Realizamos una prueba de hipótesis para verificar si existen dependencia entre los nodos de la DAG con restricciones.
+```{r}
+resultados = list()
+resultados[["ent_to_p5_7_7"]] = ci.test(x="ent",y="p5_7_7",z=setdiff(parents(dag_restricted,"p5_7_7"),"ent"),data=base_df)
+resultados[["edad_to_niv"]] = ci.test(x="edad",y="niv",z=setdiff(parents(dag_restricted,"niv"),"edad"),data=base_df)
+resultados[["p5_14_01_to_p5_14_14"]] = ci.test(x="p5_14_01",y="p5_14_14",z=setdiff(parents(dag_restricted,"p5_14_14"),"p5_14_01"),data=base_df)
+resultados[["p5_3_to_p5_6"]] = ci.test(x="p5_3",y="p5_6",z=setdiff(parents(dag_restricted,"p5_6"),"p5_3"),data=base_df)
+resultados[["p5_6_to_p5_7_7"]] = ci.test(x="p5_6",y="p5_7_7",z=setdiff(parents(dag_restricted,"p5_7_7"),"p5_6"),data=base_df)
+resultados[["edad_to_p5_6"]] = ci.test(x="edad",y="p5_6",z=setdiff(parents(dag_restricted,"p5_6"),"edad"),data=base_df)
+resultados[["niv_to_p5_14_01"]] = ci.test(x="niv",y="p5_14_01",z=setdiff(parents(dag_restricted,"p5_14_01"),"niv"),data=base_df)
+resultados[["p5_14_07_to_p5_14_14"]] = ci.test(x="p5_14_07",y="p5_14_14",z=setdiff(parents(dag_restricted,"p5_14_14"),"p5_14_07"),data=base_df)
+resultados[["niv_to_ent"]] = ci.test(x="niv",y="ent",z=setdiff(parents(dag_restricted,"ent"),"niv"),data=base_df)
+resultados[["p5_14_01_to_p5_14_07"]] = ci.test(x="p5_14_01",y="p5_14_07",z=setdiff(parents(dag_restricted,"p5_14_07"),"p5_14_01"),data=base_df)
+
+### --- Verificamos las pruebas de hipótesis con el p-value --- ###
+# resultados
+```
+
+Con esto confirmamos que $\text{p-value} > 0.05$ para cada caso de los arcos, de manera que se rechaza la hipótesis nula $H_0$ y existe suficiente evidencia para decir que son verdaderas las relaciones de dependencia entre los nodos de la DAG con restricciones. 
+
+## Scores de cada una de las DAGs
+
+DAG 1 propuesta:
+```{r}
+base_df = as.data.frame(base_final[, -1]) %>%
   mutate(across(where(is.factor), droplevels))
 score(dag_1, data = base_df, type = "bic")
 score(dag_1, data = base_df, type = "aic")
 ```
 
+DAG 2 propuesta:
 ```{r}
-base_df <- as.data.frame(base_final[, -1]) %>%
+base_df = as.data.frame(base_final[, -1]) %>%
   mutate(across(where(is.factor), droplevels))
 score(dag_2, data = base_df, type = "bic")
 score(dag_2, data = base_df, type = "aic")
 ```
 
+DAG 3 propuesta:
 ```{r}
-base_df <- as.data.frame(base_final[, -1]) %>%
+base_df = as.data.frame(base_final[, -1]) %>%
   mutate(across(where(is.factor), droplevels))
 score(dag_3, data = base_df, type = "bic")
 score(dag_3, data = base_df, type = "aic")
 ```
 
+DAG con algoritmo HC sin restricciones:
 ```{r}
-base_df <- as.data.frame(base_final[, -1]) %>%
+base_df = as.data.frame(base_final[, -1]) %>%
   mutate(across(where(is.factor), droplevels))
 score(best_dag, data = base_df, type = "bic")
 score(best_dag, data = base_df, type = "aic")
 ```
+
+DAG con algoritmo HC con restricciones:
+```{r}
+base_df = as.data.frame(base_final[, -1]) %>%
+  mutate(across(where(is.factor), droplevels))
+score(dag_restricted, data = base_df, type = "bic")
+score(dag_restricted, data = base_df, type = "aic")
+```
+
+Comparando las 3 DAG's propuestas, observamos que los valores son más negativos (o menores) que los que se obtuvieron por medio del algoritmo HC. Ahora, el método HC sin restricciones encontró una solución bajo el criterio del BIC mejor por su BIC y AIC más grandes, no obstante, tiene relaciones que no son coherentes en la práctica y, por ello, podemos descartarla. La última DAG, con restricciones y el método HC, presenta una variante de la última DAG pero bajo un criterio que corresponde a la realidad; y además de haber pasado por pruebas de hipótesis, tiene un mejor BIC y AIC que las propuestas.
+
+
 
