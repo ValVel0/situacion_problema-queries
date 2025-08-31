@@ -43,7 +43,7 @@ execute:
 
 # Metodología
 
-Guía: - Rstudio con R en archivos de QMD - Proponer DAG's bajo criterio individual - Construir una DAG bajo optimización de hill climbing con y sin restricciones - ¿Cómo destartamos las DAG's? - Uso de pruebas de hipótesis y de arc.strength - Aplicación de queries - Observaciones y resultados
+La metodología consistió en la construcción y análisis de DAGs utilizando RStudio como herramienta, así como el paquete de $bnlearn$. Inicialmente se propusieron DAGs basadas en el criterio individual de los autores, para luego ser optimizadas por medio del algoritmo de Hill Climbing, tanto con restricciones estructurales como sin ellas, buscando maximizar la distribución de la red de los datos. Para descartar DAGs, se aplicaron pruebas de hipótesis y se evaluó la fuerza de los arcos con la función $arc.strength()$. Finalmente, se emplearon queries en R para extraer relaciones clave y realizar observaciones relevantes, integrando conocimiento sobre el tema, optimización y análisis estadístico para construir modelos explicativos basados en DAGs.
 
 # Resultados (aplicación)
 
@@ -129,6 +129,9 @@ resultados_p_hipotesis
 ## Probabilidad de las queries
 
 #### Primer Query
+Probabilidad de que una persona salga de un hospital en Yucatán y que utilice transporte de personal o un automóvil como medio de transporte: $0$
+
+Este resultado se debe a que no hay datos que coincidan de un hospital en Yucatán como punto de origen, por lo que el evento no es probable.
 
 #### Segundo Query
 
