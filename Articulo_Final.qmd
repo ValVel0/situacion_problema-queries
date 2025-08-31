@@ -37,42 +37,117 @@ execute:
   error: false
 ---
 
-
 # Introducción
 
-- Cuando terminemos el artículo, decimos de qué se trató y algo interesante de este.
-
-
+-   Cuando terminemos el artículo, decimos de qué se trató y algo interesante de este.
 
 # Metodología
 
-Guía:
--   Rstudio con R en archivos de QMD
--   Proponer DAG's bajo criterio individual
--   Construir una DAG bajo optimización de hill climbing con y sin restricciones
--   ¿Cómo destartamos las DAG's?
--   Uso de pruebas de hipótesis y de arc.strength
--   Aplicación de queries
--   Observaciones y resultados 
-
-
+Guía: - Rstudio con R en archivos de QMD - Proponer DAG's bajo criterio individual - Construir una DAG bajo optimización de hill climbing con y sin restricciones - ¿Cómo destartamos las DAG's? - Uso de pruebas de hipótesis y de arc.strength - Aplicación de queries - Observaciones y resultados
 
 # Resultados (aplicación)
-Guía:
--   Valores de BIC y AIC
--   Valores de las pruebas de arc.strength y p-value
--   Estructura de las DAG's e interpretación
--   Resultados de los queries e interpretación breve
+
+## Base de datos
+
+Posterior a la selección de variables según el contenido de los queries, se seleccionaron las variables y unieron en un solo dataset, el cual servió como la base para construir las DAG's, analizar las dependencias y realizar las cuatro consultas asignadas. Se muestra a continuación un fragmento de la misma.
+
+```{r}
+head_df = readRDS("objetos/head_base_final.rds")
+head_df
+```
+
+## Diagramas de DAG's utilizadas y analizadas
+
+##### DAG propuesta 1
+
+![DAG 1](figures/diagrama_dag1.png)
+
+##### DAG propuesta 2
+
+![DAG 2](figures/diagrama_dag2.png)
+
+##### DAG propuesta 3
+
+![DAG 3](figures/diagrama_dag3.png)
+
+##### DAG con HC sin restricciones
+
+![DAG con HC sin restricciones](figures/diagrama_best_dag.png)
+
+##### DAG HC con restricciones número 0
+
+![DAG HC con restricciones 0](figures/diagrama_dag_restricted_0.png)
+
+##### DAG HC con restricciones final
+
+![DAG HC con restricciones final](figures/diagrama_dag_restricted.png)
+
+## BIC y AIC de las DAG's propuestas y con el algoritmo HC
+
+| DAG                      | BIC        | AIC        |
+|--------------------------|------------|------------|
+| DAG 1                    | -7,479,102 | -6,150,732 |
+| DAG 2                    | -6,089,081 | -6,041,948 |
+| DAG 3                    | -5,819,506 | -5,784,574 |
+| DAG HC sin restricciones | -5,586,194 | -5,556,406 |
+| DAG HC con restricciones | -5,603,767 | -5,573,527 |
+
+## Resultados de prueba arc.strength()
+
+Una vez seleccionadas la DAG 3, la DAG con HC sin restricciones y la DAG HC con restricciones, se les hicieron una prueba por medio del método arc.strength, el cual busca medir la fuerza de la relación probabilística entre dos nodos conectados por un arco. Los resultados fueron estos:
+
+##### DAG 3 propuesta
+
+```{r}
+prueba_strength_dag3 = readRDS("objetos/prueba_strength_dag3.rds")
+prueba_strength_dag3
+```
+
+##### DAG con HC sin restricciones
+
+```{r}
+prueba_strength_best_dag = readRDS("objetos/prueba_strength_best_dag.rds")
+prueba_strength_best_dag
+```
+
+##### DAG HC con restricciones
+
+```{r}
+prueba_strength_restricted = readRDS("objetos/prueba_strength_restricted.rds")
+prueba_strength_restricted
+```
+
+## Prueba de p-value sobre DAG con HC
+
+Resultado del análisis de los valores del BIC y AIC, así como de la prueba arc.strength, se seleccionó la DAG HC con restricciones para analizar si sus relaciones de dependencia son significativas:
+
+```{r}
+resultados_p_hipotesis = readRDS("objetos/resultados_p_hipótesis.rds")
+resultados_p_hipotesis
+```
+
+## Probabilidad de las queries
+
+#### Primer Query
+
+#### Segundo Query
+
+#### Tercer Query
+
+#### Cuarto Query
+Probabilidad de que un hombre use un vehículo no motorizado dado que el origen es desde su hogar; escuela; comercio, mercado, tienda o centro comercial; restaurante, bar, cafetería; deportivo, gimnasio; o vía pública $0.2962361$
 
 
+# Análisis de los resultados
 
 # Conclusiones
-- Concluir :7
 
-
+-   Concluir :7
 
 # Refencias
 
+referenciar
 
+https://r-coder.com/exportar-datos-r/
 
-
+https://www.rdocumentation.org/packages/bnlearn/versions/5.1/topics/arc.strength
