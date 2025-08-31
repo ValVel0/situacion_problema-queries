@@ -1,6 +1,6 @@
 ---
 title: "Artículo 1: Redes bayesianas multinomiales"
-author: "Vidal López A01253568"
+author: "Vidal López A01253568 | Barush Copado A00573182 | Pedro Silva A01247217 | Diego Barragán A01738369"
 format:
    html:
      toc: true
@@ -394,8 +394,13 @@ bn = bn.fit(dag_restricted, data = base_df)
 ### Consulta de probabilidad
 
 Query 1
+¿Qué probabilidad hay de que una persona que salga de un hospital en Yucatán haya utilizado un transporte de personal o un automóvil como medio de transporte?
 ```{r}
-
+prob1 = cpquery(bn,event = (p5_6 == "8" & p5_7_7 == "31"), #Salió de un hospital en Yucatán
+  evidence = (p5_14_01 == "1" | p5_14_19 == "1"), #Utilizó automóvil o transporte de personal
+  n = 10^6
+)
+cat("Probabilidad de que una persona haya salido de un hospital en Yucatán haya utilizado transporte de personal o automóvil como medio de transporte:", prob1)
 ```
 
 Query 2
