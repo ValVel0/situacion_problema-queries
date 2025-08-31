@@ -303,3 +303,17 @@ score(dag_restricted, data = base_df, type = "aic")
 ```
 
 Comparando las 3 DAG's propuestas, observamos que los valores son más negativos (o menores) que los que se obtuvieron por medio del algoritmo HC. Ahora, el método HC sin restricciones encontró una solución bajo el criterio del BIC mejor por su BIC y AIC más grandes, no obstante, tiene relaciones que no son coherentes en la práctica y, por ello, podemos descartarla. La última DAG, con restricciones y el método HC, presenta una variante de la última DAG pero bajo un criterio que corresponde a la realidad; y además de haber pasado por pruebas de hipótesis, tiene un mejor BIC y AIC que las propuestas.
+
+Transformación de los datos para poder realizar análisis y sacar la probabilidad de eventos para así resolver los 4 casos de estudio que se están comprobando. 
+```{r}
+bn_mle = bn.fit(dag_restricted, data = base_df, method = "mle")
+```
+
+```{r}
+bn = bn.fit(dag_restricted, data = base_df)
+```
+
+Queries:
+```{r}
+cpquery(bn, event = (), evidence = (), n = 10^6)
+```
