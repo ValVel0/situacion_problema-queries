@@ -38,16 +38,41 @@ execute:
 ---
 
 
-# Primero
+# Introducción
 
-Texto de más texto Texto de más texto Texto de más texto Texto de más texto Texto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más texto.
-
-
-
-Texto en dos columnas.Texto de más texto Texto de más texto Texto de más texto Texto de más texto Texto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más texto.
+- Cuando terminemos el artículo, decimos de qué se trató y algo interesante de este.
 
 
 
-Texto de más texto Texto de más texto Texto de más texto Texto de más texto Texto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más textoTexto de más texto
+# Metodología
 
-# Segunda sección
+Guía:
+-   Rstudio con R en archivos de QMD
+-   Proponer DAG's bajo criterio individual
+-   Construir una DAG bajo optimización de hill climbing con y sin restricciones
+-   ¿Cómo destartamos las DAG's?
+-   Uso de pruebas de hipótesis y de arc.strength
+-   Aplicación de queries
+-   Observaciones y resultados 
+
+
+
+# Resultados (aplicación)
+Guía:
+-   Valores de BIC y AIC
+-   Valores de las pruebas de arc.strength y p-value
+-   Estructura de las DAG's e interpretación
+-   Resultados de los queries e interpretación breve
+
+
+
+# Conclusiones
+- Concluir :7
+
+
+
+# Refencias
+
+
+
+

@@ -225,7 +225,6 @@ graphviz.plot(dag_restricted, shape = "ellipse")
 arc.strength(dag_3, data = base_df, criterion = "mi")
 ```
 
-
 ```{r}
 arc.strength(best_dag, data = base_df, criterion = "mi")
 ```
@@ -236,6 +235,7 @@ arc.strength(dag_restricted, data = base_df, criterion = "mi")
 ```
 
 Realizamos una prueba de hipótesis para verificar si existen dependencia entre los nodos de la DAG con restricciones.
+
 ```{r}
 resultados = list()
 resultados[["ent_to_p5_7_7"]] = ci.test(x="ent",y="p5_7_7",z=setdiff(parents(dag_restricted,"p5_7_7"),"ent"),data=base_df)
@@ -253,11 +253,12 @@ resultados[["p5_14_01_to_p5_14_07"]] = ci.test(x="p5_14_01",y="p5_14_07",z=setdi
 # resultados
 ```
 
-Con esto confirmamos que $\text{p-value} > 0.05$ para cada caso de los arcos, de manera que se rechaza la hipótesis nula $H_0$ y existe suficiente evidencia para decir que son verdaderas las relaciones de dependencia entre los nodos de la DAG con restricciones. 
+Con esto confirmamos que $\text{p-value} < 0.05$ para cada caso de los arcos, de manera que se rechaza la hipótesis nula $H_0$ y existe suficiente evidencia estadística para afirmar que las relaciones de dependencia entre los nodos de la DAG con restricciones son significativas.
 
 ## Scores de cada una de las DAGs
 
 DAG 1 propuesta:
+
 ```{r}
 base_df = as.data.frame(base_final[, -1]) %>%
   mutate(across(where(is.factor), droplevels))
@@ -266,6 +267,7 @@ score(dag_1, data = base_df, type = "aic")
 ```
 
 DAG 2 propuesta:
+
 ```{r}
 base_df = as.data.frame(base_final[, -1]) %>%
   mutate(across(where(is.factor), droplevels))
@@ -274,6 +276,7 @@ score(dag_2, data = base_df, type = "aic")
 ```
 
 DAG 3 propuesta:
+
 ```{r}
 base_df = as.data.frame(base_final[, -1]) %>%
   mutate(across(where(is.factor), droplevels))
@@ -282,6 +285,7 @@ score(dag_3, data = base_df, type = "aic")
 ```
 
 DAG con algoritmo HC sin restricciones:
+
 ```{r}
 base_df = as.data.frame(base_final[, -1]) %>%
   mutate(across(where(is.factor), droplevels))
@@ -290,6 +294,7 @@ score(best_dag, data = base_df, type = "aic")
 ```
 
 DAG con algoritmo HC con restricciones:
+
 ```{r}
 base_df = as.data.frame(base_final[, -1]) %>%
   mutate(across(where(is.factor), droplevels))
@@ -298,6 +303,3 @@ score(dag_restricted, data = base_df, type = "aic")
 ```
 
 Comparando las 3 DAG's propuestas, observamos que los valores son más negativos (o menores) que los que se obtuvieron por medio del algoritmo HC. Ahora, el método HC sin restricciones encontró una solución bajo el criterio del BIC mejor por su BIC y AIC más grandes, no obstante, tiene relaciones que no son coherentes en la práctica y, por ello, podemos descartarla. La última DAG, con restricciones y el método HC, presenta una variante de la última DAG pero bajo un criterio que corresponde a la realidad; y además de haber pasado por pruebas de hipótesis, tiene un mejor BIC y AIC que las propuestas.
-
-
-
