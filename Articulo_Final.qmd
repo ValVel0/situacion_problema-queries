@@ -129,6 +129,9 @@ resultados_p_hipotesis
 ## Probabilidad de las queries
 
 #### Primer Query
+Probabilidad de que una persona salga de un hospital en Yucatán y que utilice transporte de personal o un automóvil como medio de transporte: $0$
+
+Este resultado se debe a que no hay datos que coincidan de un hospital en Yucatán como punto de origen, por lo que el evento no es probable.
 
 #### Segundo Query
 
