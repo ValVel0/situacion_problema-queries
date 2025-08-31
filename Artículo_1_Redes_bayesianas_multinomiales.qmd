@@ -255,7 +255,7 @@ resultados[["p5_14_01_to_p5_14_07"]] = ci.test(x="p5_14_01",y="p5_14_07",z=setdi
 
 Con esto confirmamos que $\text{p-value} < 0.05$ para cada caso de los arcos, de manera que se rechaza la hipótesis nula $H_0$ y existe suficiente evidencia estadística para afirmar que las relaciones de dependencia entre los nodos de la DAG con restricciones son significativas.
 
-## Scores de cada una de las DAGs
+### Scores de cada una de las DAGs
 
 DAG 1 propuesta:
 
@@ -304,7 +304,10 @@ score(dag_restricted, data = base_df, type = "aic")
 
 Comparando las 3 DAG's propuestas, observamos que los valores son más negativos (o menores) que los que se obtuvieron por medio del algoritmo HC. Ahora, el método HC sin restricciones encontró una solución bajo el criterio del BIC mejor por su BIC y AIC más grandes, no obstante, tiene relaciones que no son coherentes en la práctica y, por ello, podemos descartarla. La última DAG, con restricciones y el método HC, presenta una variante de la última DAG pero bajo un criterio que corresponde a la realidad; y además de haber pasado por pruebas de hipótesis, tiene un mejor BIC y AIC que las propuestas.
 
+# Aplicación de la DAG y queries
+
 Transformación de los datos para poder realizar análisis y sacar la probabilidad de eventos para así resolver los 4 casos de estudio que se están comprobando. 
+
 ```{r}
 bn_mle = bn.fit(dag_restricted, data = base_df, method = "mle")
 ```
@@ -313,7 +316,50 @@ bn_mle = bn.fit(dag_restricted, data = base_df, method = "mle")
 bn = bn.fit(dag_restricted, data = base_df)
 ```
 
-Queries:
+
+### Consulta de probabilidad
+
+Query 1
 ```{r}
-cpquery(bn, event = (), evidence = (), n = 10^6)
+
 ```
+
+Query 2
+```{r}
+
+```
+
+Query 3
+```{r}
+
+```
+
+Query 4
+¿Cuál es la probabilidad de que un hombre use un vehículo no motorizado cuando la distancia de su viaje es menor a 2 km?
+
+Como no existe una variable que directamente denote la distancia recorrida en los viajes, se utilizá la variable p5_6 (origen de viaje) para entender el propósito del viaje. Ya que se está mapeando la probabilidad de de un hombre utilizar vehículos no motorizados, se asume que las distancias tienen que ser cortas, pues los medios son por bicicleta o caminando. Con este planteamiento, los orígenes del viaje que podrían coincidir con una _distancia corta_ son:
+
+-   Su hogar: 1
+-   Escuela: 2
+-   Comercio, mercado, tienda o centro comercial: 5
+-   Restaurante, bar, cafetería: 9
+-   Deportivo, gimnasio: 10
+-   Vía pública: 15
+
+De esto, la query se podría modificar como: _¿Cuál es la probabilidad de que un hombre use un vehículo no motorizado cuando el origen es desde su hogar; escuela; comercio, mercado, tienda o centro comercial; restaurante, bar, cafetería; deportivo, gimnasio; o vía pública?_ De este modo, tomamos que sea un hombre utilizando un vehículo no motorizado como el evento y su origen como la evidencia.
+
+
+```{r}
+prob = cpquery(
+  bn_mle,
+  event = (sexo == "1" & (p5_14_07 == "1" | p5_14_14 == "1")),
+  evidence = ((p5_6 == "01" | p5_6 == "02" | p5_6 == "05" |
+     p5_6 == "09" | p5_6 == "10" | p5_6 == "15")),
+  n = 10^6
+)
+
+cat("Probabilidad de que un hombre use un vehículo no motorizado dado que el origen es desde su hogar; escuela; comercio, mercado, tienda o centro comercial; restaurante, bar, cafetería; deportivo, gimnasio; o vía pública", prob)
+
+```
+
+
