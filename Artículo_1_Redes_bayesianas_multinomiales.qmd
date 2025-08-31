@@ -429,7 +429,7 @@ sum(base_final$sexo == "1", na.rm = TRUE)
 sum(base_final$p5_7_7 == "14", na.rm = TRUE)
 
 # Jóvenes 
-sum(base_final$edad > 17 & base_final$edad < 30, na.rm = TRUE)
+sum({edad_num <- as.numeric(as.character(base_final$edad)); edad_num > 17 & edad_num < 30}, na.rm = TRUE)
 
 # Universitarios
 sum(base_final$niv %in% c("8", "9"), na.rm = TRUE)
@@ -445,7 +445,7 @@ sum(base_final$p5_3 == "1", na.rm = TRUE)
 # Registros que cumplen TODAS las condiciones de evidencia
 evidencia <- base_final$sexo == "1" & 
              base_final$p5_7_7 == "14" & 
-             base_final$edad > 17 & base_final$edad < 30 & 
+             as.numeric(as.character(base_final$edad)) > 17 & as.numeric(as.character(base_final$edad)) < 30 & 
              (base_final$niv == "8" | base_final$niv == "9")
 
 sum(evidencia, na.rm = TRUE)
