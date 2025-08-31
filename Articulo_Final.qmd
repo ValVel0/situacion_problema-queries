@@ -1,18 +1,18 @@
 ---
 title: "Artículo 1 - Redes Bayesianas multinomiales"
 author:
-  - name: "Nombre Apellido"
+  - name: "Barush Caliel C. Luna"
     affiliation: "1"
-  - name: "Nombre Apellido"
+  - name: "Diego B. Castillo"
     affiliation: "1"
-  - name: "Nombre Apellido"
+  - name: "Pedro Emilio S. Rodríguez"
     affiliation: "1"
-  - name: "Nombre Apellido"
+  - name: "Vidal Alejandro G. López"
     affiliation: "1"
 affiliation:
   - id: "1"
     institution: "Instituto Tecnológico de Estudios Superiores de Monterrey"
-date: "Ponemos el día"
+date: "Domingo, 31 de Agosto de 2025"
 abstract: |
   Aquí  escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección)
 keywords: [palabra1, palabra2, palabra3]
@@ -133,6 +133,9 @@ resultados_p_hipotesis
 #### Segundo Query
 
 #### Tercer Query
+Probabilidad de que un hombre joven universitario en Jalisco utilice tren ligero durante los días entre semana $0$
+
+Este resultado se debe a la baja cantidad de datos registrados de viajes dentro de Jalisco (solamente 13 registros), lo que genera una representatividad insuficiente para capturar esta combinación específica de características.
 
 #### Cuarto Query
 Probabilidad de que un hombre use un vehículo no motorizado dado que el origen es desde su hogar; escuela; comercio, mercado, tienda o centro comercial; restaurante, bar, cafetería; deportivo, gimnasio; o vía pública $0.2962361$
