@@ -12,7 +12,7 @@ author:
 affiliation:
   - id: "1"
     institution: "Instituto Tecnológico de Estudios Superiores de Monterrey"
-date: "Domingo, 31 de Agosto de 2025"
+date: "08/31/2025"
 abstract: |
   This study explores the application of Bayesian networks to model urban mobility patterns using large-scale transport survey data. We evaluate multiple structural learning approaches, including expert-defined DAGs and constrained algorithmic optimization using Hill Climbing methods. Our methodology demonstrates how domain knowledge can be integrated with machine learning techniques to create interpretable yet statistically robust models. The research highlights both the capabilities and limitations of data-driven transport modeling, particularly regarding geographical representation in official surveys. The findings contribute to methodological discussions in transportation research and offer insights into balancing statistical optimization with theoretical coherence in complex systems modeling.
 keywords: [Bayesian networks, structural learning, urban mobility, transportation modeling, Hill Climbing algorithm, origin-destination surveys.]
@@ -151,24 +151,7 @@ resultados_p_hipotesis
 ## Probabilidad de las queries
 
 #### Primer Query
-
-<<<<<<< HEAD
-
-
-
-#### Segundo Query
-
-
-#### Tercer Query
-Probabilidad de que un hombre joven universitario en Jalisco utilice tren ligero durante los días entre semana $0$
-
-=======
-Probabilidad de que una persona salga de un hospital en Yucatán y que
-utilice transporte de personal o un automóvil como medio de transporte:
-$0$
-
-Este resultado se debe a que no hay datos que coincidan de un hospital
-en Yucatán como punto de origen, por lo que el evento no es probable.
+Probabilidad de que una persona haya salido de un hospital en Yucatán haya utilizado transporte de personal o automóvil como medio de transporte $0$
 
 #### Segundo Query
 
@@ -184,7 +167,6 @@ dentro de Jalisco (solamente 13 registros), lo que genera una
 representatividad insuficiente para capturar esta combinación específica
 de características.
 
->>>>>>> c5a4fe7d0b1012e002bff92cc392ad76fbe3ed71
 
 #### Cuarto Query
 
@@ -216,49 +198,6 @@ La prueba de independencia condicional basada en información mutua discreta eva
 Los resultados se dividieron en dos: las probabilidades diferentes e iguales a $0$. Para las diferentes a $0$, el query 2: la probabilidad de que una persona de 20 años y de sexo femenino use el tren ligero como medio de transporte dado que es de CDMX fue muy baja, cerca del 0.83\%, sugiriendo que el uso del tren ligero por este grupo de mujeres es muy poco común bajo el modelo de los datos analizados. Para el query cuatro, la probabilidad fue del 29.48%. Esta es una probabilidad baja, no obstante, con más número de frecuencias, por tanto, podría ser poco frecuente, mas no improbable.   
 
 Por otro lado, en el caso del query 1, esto se debe a que no existen registros de personas que salgan de un hospital en Yucatán en los datos disponibles. Igualmente, la query tres tuvo un valor nulo, donde la baja cantidad de datos registrados de viajes dentro de Jalisco (solamente 13 registros) es lo que generó una representatividad insuficiente para capturar esta combinación específica de características. En ambos casos, el valor nulo refleja limitaciones de la muestra, y no indican que tales eventos sean improbables.
-
-
-Los resultados muestran diferencias claras en el desempeño de las
-distintas aproximaciones metodológicas utilizadas para construir los
-DAGs. Las tres propuestas iniciales (DAG 1, DAG 2 y DAG 3) obtuvieron
-scores BIC y AIC considerablemente más bajos, con valores que oscilaron
-entre $−7,479,102$ y $−5,819,506$ para BIC, y entre $−6,150,732$ y
-$−5,784,574$ para AIC. Estos puntajes sugieren que los modelos
-planteados manualmente tuvieron un ajuste limitado respecto a la
-estructura real de los datos.
-
-En cambio, el algoritmo de Hill Climbing sin restricciones mostró una
-capacidad de optimización mucho mayor, alcanzando valores notablemente
-mejores ($BIC: −5,586,194; AIC: −5,556,406$). Esta mejora estadística
-indica que el algoritmo logró detectar dependencias en los datos que no
-aparecieron en las propuestas manuales. Sin embargo, al analizar
-cualitativamente la estructura obtenida, se observó un problema
-importante: varias de las relaciones establecidas carecían de sentido en
-el contexto de movilidad urbana, pues planteaban conexiones poco
-plausibles entre variables. Por ejemplo, la variable *sexo* depende de
-la variable *niv* que describe el grado de educación de la persona en el
-registro. Por otro lado, la variable *edad* depende de la variable
-*p5_6* la cual describe el lugar de origen del viaje. Ambas relaciones
-carecen de sentido e interpretabilidad.
-
-Por ello se llevó a cabo la incorporación de restricciones estructurales
-en el Hill Climbing, lo cual representó un punto medio entre la
-optimización estadística y la coherencia teórica. Aunque los scores
-obtenidos ($BIC: −5,603,767; AIC: −5,573,527$) fueron ligeramente más
-bajos que en el modelo sin restricciones, la estructura resultante fue
-mucho más interpretable. Las pruebas con $arc.strength()$ confirmaron
-además la solidez estadística de estas relaciones: todas mostraron
-fortalezas significativas, incluso aquellas con valores muy pequeños,
-como las conexiones entre variables demográficas y patrones de
-movilidad.
-
-De manera complementaria, las pruebas de hipótesis basadas en
-información mutua reforzaron la validez de la DAG con restricciones, ya
-que en todas las relaciones evaluadas se obtuvieron valores de
-$p<2.2×10^{-16}$. Esto confirma que las dependencias identificadas no se
-deben al azar, sino que reflejan patrones reales presentes en los datos
-de movilidad urbana.
->>>>>>> c5a4fe7d0b1012e002bff92cc392ad76fbe3ed71
 
 # Conclusiones
 
