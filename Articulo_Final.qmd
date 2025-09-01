@@ -82,15 +82,16 @@ head_df
 
 ![DAG HC con restricciones final](figures/diagrama_dag_restricted.png)
 
-## BIC y AIC de las DAG's propuestas y con el algoritmo HC
+**Tabla 1.** _BIC y AIC de las DAG propuestas y con el algoritmo HC._ 
 
 | DAG                      | BIC        | AIC        |
-|--------------------------|------------|------------|
+| ------------------------ | ---------- | ---------- |
 | DAG 1                    | -7,479,102 | -6,150,732 |
 | DAG 2                    | -6,089,081 | -6,041,948 |
 | DAG 3                    | -5,819,506 | -5,784,574 |
 | DAG HC sin restricciones | -5,586,194 | -5,556,406 |
 | DAG HC con restricciones | -5,603,767 | -5,573,527 |
+
 
 ## Resultados de prueba arc.strength()
 
@@ -131,20 +132,44 @@ resultados_p_hipotesis
 #### Primer Query
 Probabilidad de que una persona salga de un hospital en Yucatán y que utilice transporte de personal o un automóvil como medio de transporte: $0$
 
-Este resultado se debe a que no hay datos que coincidan de un hospital en Yucatán como punto de origen, por lo que el evento no es probable.
+
+
 
 #### Segundo Query
+
 
 #### Tercer Query
 Probabilidad de que un hombre joven universitario en Jalisco utilice tren ligero durante los días entre semana $0$
 
-Este resultado se debe a la baja cantidad de datos registrados de viajes dentro de Jalisco (solamente 13 registros), lo que genera una representatividad insuficiente para capturar esta combinación específica de características.
 
 #### Cuarto Query
 Probabilidad de que un hombre use un vehículo no motorizado dado que el origen es desde su hogar; escuela; comercio, mercado, tienda o centro comercial; restaurante, bar, cafetería; deportivo, gimnasio; o vía pública $0.2962361$
 
 
 # Análisis de los resultados
+
+## Selección de DAG:
+
+La tabla 1 compara los estadísticos BIC y AIC de las cinco DAG's propuestas. Por las características del BIC y AIC de ser estadísticos relativos y que bajo el funcionamiento de la librería *bnlearn*, un valor mayor denota un mejor modelo, las DAG's que destacan son la DAG 3, DAG con HC sin restricciones y DAG HC con restricciones. No obstante, La DAG 3, al ser seleccionada por hipótesis humanas, pueden presentar un sesgo o no capturar la complejidad de los datos. Para ello, se depuró de cinco DAG's a solamente dos: DAG con HC sin restricciones y DAG HC con restricciones.
+
+Gracias al algoritmo hill-climbing, la versión de estas DAG's son óptimas al menos en un máximo local (no siempre global). La DAG sin restricciones tiene el mayor valor, no obstante, presenta falta deinterpretabilidad con arcos y nodos que no forman sentido en la vida real. Un ejemplo de ello es que, según la DAG con HC sin restricciones ($\text{BIC} = -5,586,194$ y un $\text{AIC} = -5,556,406 $), el sexo depende del nivel educativo o que la edad depende del origen del viaje. Por estas observaciones, es que se escogió la DAG HC con restrcciones, la cual presenta mayor interpretabilidad y está en un óptimo local con un $\text{BIC} = -5,603,767$ y un $\text{AIC} = -5,573,527$   
+
+## Análisis de fuerza de arcos
+
+Los resultados de la prueba `arc.strength()` muestran que, en la DAG 3, la gran mayoría de sus arcos están cerca de 0, con excepción de las relaciones de p5_3 con p5_14_07	($1.841923e-07$) y p5_3 con	p5_14_12 ($2.608496e-02$). De esta manera, aún cuando estos valores son mayores a los demás, siguen siendo relaciones de dependencia significativas. 
+
+El comportamiento es similar para las DAG's con HC utilizando y sin restricciones. La variante en este caso es que todos los arcos tienen valores cercanos o iguales a cero ($0.000000e+00$). Por ello, también es posible confirmar que las relaciones de dependencia son significativas, y por ende, no es necesario removerlas. 	
+
+## Pruebas de hipótesis de dependencia
+
+La prueba de independencia condicional basada en información mutua discreta evaluó los arcos de la DAG HC con restricciones. Se puede observar que el $\text{p-value}< 2.2e-16$ en cada uno de los arcos, lo que indica que se rechaza la hipótesis nula de independencia. Entonces se puede afirmar que sí existen relaciones de dependencia son estadísticamente significativas, incluso cuando las relaciones están condicionadas por otras variables. Asimismo, estos resultados junto con las pruebas de fuerza de arcos basados en información mutua reafirman el análisis sobre la DAG HC con restricciones. 
+
+## Probabilidad de queries
+
+Los resultados se dividieron en dos: las probabilidades diferentes e iguales a $0$. Para las diferentes a $0$, el query 2: la probabilidad de que una persona de 20 años y de sexo femenino use el tren ligero como medio de transporte dado que es de CDMX fue muy baja, cerca del 0.83\%, sugiriendo que el uso del tren ligero por este grupo de mujeres es muy poco común bajo el modelo de los datos analizados. Para el query cuatro, la probabilidad fue del 29.48%. Esta es una probabilidad baja, no obstante, con más número de frecuencias, por tanto, podría ser poco frecuente, mas no improbable.   
+
+Por otro lado, en el caso del query 1, esto se debe a que no existen registros de personas que salgan de un hospital en Yucatán en los datos disponibles. Igualmente, la query tres tuvo un valor nulo, donde la baja cantidad de datos registrados de viajes dentro de Jalisco (solamente 13 registros) es lo que generó una representatividad insuficiente para capturar esta combinación específica de características. En ambos casos, el valor nulo refleja limitaciones de la muestra, y no indican que tales eventos sean improbables.
+
 
 # Conclusiones
 

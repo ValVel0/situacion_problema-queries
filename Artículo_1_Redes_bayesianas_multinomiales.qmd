@@ -459,6 +459,7 @@ base_final[which(evidencia), ]
 ```
 La query sobre la probabilidad de que un hombre joven universitario en Jalisco utilice tren ligero durante los días entre semana arrojó una probabilidad = 0. Este resultado se debe a la baja cantidad de datos registrados de viajes dentro de Jalisco (solamente 13 registros), lo que genera una representatividad insuficiente para capturar esta combinación específica de características. Aunque la base de datos contiene individualmente registros de hombres, jóvenes universitarios y usuarios de tren ligero, no existe ningún registro que combine todas estas características de manera simultánea, lo que muestra las limitaciones de aplicar consultas muy específicas en esta muestra con la categoría geográfica a la que esta sujeta (Zona Metropolitana del Valle de México ZMVM).
 
+
 Query 4
 ¿Cuál es la probabilidad de que un hombre use un vehículo no motorizado cuando la distancia de su viaje es menor a 2 km?
 
