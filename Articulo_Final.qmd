@@ -40,8 +40,7 @@ editor:
 
 # Introducción
 
--   Cuando terminemos el artículo, decimos de qué se trató y algo
-    interesante de este.
+Este artículo presenta un análisis de movilidad urbana mediante el uso de redes bayesianas (DAGs) aplicadas a datos de la Encuesta Origen-Destino 2017 del INEGI. La investigación se centra en la Zona Metropolitana del Valle de México y combina métodos de aprendizaje automático con conocimiento sustantivo para modelar las complejas relaciones entre variables demográficas, características de viaje y elección de modos de transporte.
 
 # Metodología
 
@@ -160,6 +159,8 @@ Este resultado se debe a que no hay datos que coincidan de un hospital
 en Yucatán como punto de origen, por lo que el evento no es probable.
 
 #### Segundo Query
+
+Probabilidad de que una persona de 20 años y de sexo femenino use el tren ligero como medio de transporte dado que es de CDMX $0.008258929$
 
 #### Tercer Query
 
