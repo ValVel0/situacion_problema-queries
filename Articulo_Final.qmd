@@ -14,8 +14,8 @@ affiliation:
     institution: "Instituto Tecnológico de Estudios Superiores de Monterrey"
 date: "Domingo, 31 de Agosto de 2025"
 abstract: |
-  Aquí  escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección)
-keywords: [palabra1, palabra2, palabra3]
+  This study explores the application of Bayesian networks to model urban mobility patterns using large-scale transport survey data. We evaluate multiple structural learning approaches, including expert-defined DAGs and constrained algorithmic optimization using Hill Climbing methods. Our methodology demonstrates how domain knowledge can be integrated with machine learning techniques to create interpretable yet statistically robust models. The research highlights both the capabilities and limitations of data-driven transport modeling, particularly regarding geographical representation in official surveys. The findings contribute to methodological discussions in transportation research and offer insights into balancing statistical optimization with theoretical coherence in complex systems modeling.
+keywords: [Bayesian networks, structural learning, urban mobility, transportation modeling, Hill Climbing algorithm, origin-destination surveys.]
 format:
   html:
     toc: true
