@@ -14,10 +14,8 @@ affiliation:
     institution: "Instituto Tecnológico de Estudios Superiores de Monterrey"
 date: "Domingo, 31 de Agosto de 2025"
 abstract: |
-  Aquí  escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección). Aquí escribimos el Abstract (o en la siguiente sección)
-keywords: [palabra1, palabra2, palabra3]
-
-#HTML y PDF
+  This study explores the application of Bayesian networks to model urban mobility patterns using large-scale transport survey data. We evaluate multiple structural learning approaches, including expert-defined DAGs and constrained algorithmic optimization using Hill Climbing methods. Our methodology demonstrates how domain knowledge can be integrated with machine learning techniques to create interpretable yet statistically robust models. The research highlights both the capabilities and limitations of data-driven transport modeling, particularly regarding geographical representation in official surveys. The findings contribute to methodological discussions in transportation research and offer insights into balancing statistical optimization with theoretical coherence in complex systems modeling.
+keywords: [Bayesian networks, structural learning, urban mobility, transportation modeling, Hill Climbing algorithm, origin-destination surveys.]
 format:
   html:
     toc: true
@@ -35,21 +33,38 @@ execute:
   echo: true
   warning: false
   error: false
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
 # Introducción
 
--   Cuando terminemos el artículo, decimos de qué se trató y algo interesante de este.
+Este artículo presenta un análisis de movilidad urbana mediante el uso de redes bayesianas (DAGs) aplicadas a datos de la Encuesta Origen-Destino 2017 del INEGI. La investigación se centra en la Zona Metropolitana del Valle de México y combina métodos de aprendizaje automático con conocimiento sustantivo para modelar las complejas relaciones entre variables demográficas, características de viaje y elección de modos de transporte.
 
 # Metodología
 
-La metodología consistió en la construcción y análisis de DAGs utilizando RStudio como herramienta, así como el paquete de $bnlearn$. Inicialmente se propusieron DAGs basadas en el criterio individual de los autores, para luego ser optimizadas por medio del algoritmo de Hill Climbing, tanto con restricciones estructurales como sin ellas, buscando maximizar la distribución de la red de los datos. Para descartar DAGs, se aplicaron pruebas de hipótesis y se evaluó la fuerza de los arcos con la función $arc.strength()$. Finalmente, se emplearon queries en R para extraer relaciones clave y realizar observaciones relevantes, integrando conocimiento sobre el tema, optimización y análisis estadístico para construir modelos explicativos basados en DAGs.
+La metodología consistió en la construcción y análisis de DAGs
+utilizando RStudio como herramienta, así como el paquete de $bnlearn$.
+Inicialmente se propusieron DAGs basadas en el criterio individual de
+los autores, para luego ser optimizadas por medio del algoritmo de Hill
+Climbing, tanto con restricciones estructurales como sin ellas, buscando
+maximizar la distribución de la red de los datos. Para descartar DAGs,
+se aplicaron pruebas de hipótesis y se evaluó la fuerza de los arcos con
+la función $arc.strength()$. Finalmente, se emplearon queries en R para
+extraer relaciones clave y realizar observaciones relevantes, integrando
+conocimiento sobre el tema, optimización y análisis estadístico para
+construir modelos explicativos basados en DAGs.
 
 # Resultados (aplicación)
 
 ## Base de datos
 
-Posterior a la selección de variables según el contenido de los queries, se seleccionaron las variables y unieron en un solo dataset, el cual servió como la base para construir las DAG's, analizar las dependencias y realizar las cuatro consultas asignadas. Se muestra a continuación un fragmento de la misma.
+Posterior a la selección de variables según el contenido de los queries,
+se seleccionaron las variables y unieron en un solo dataset, el cual
+servió como la base para construir las DAG's, analizar las dependencias
+y realizar las cuatro consultas asignadas. Se muestra a continuación un
+fragmento de la misma.
 
 ```{r}
 head_df = readRDS("objetos/head_base_final.rds")
@@ -95,7 +110,11 @@ head_df
 
 ## Resultados de prueba arc.strength()
 
-Una vez seleccionadas la DAG 3, la DAG con HC sin restricciones y la DAG HC con restricciones, se les hicieron una prueba por medio del método arc.strength, el cual busca medir la fuerza de la relación probabilística entre dos nodos conectados por un arco. Los resultados fueron estos:
+Una vez seleccionadas la DAG 3, la DAG con HC sin restricciones y la DAG
+HC con restricciones, se les hicieron una prueba por medio del método
+arc.strength, el cual busca medir la fuerza de la relación
+probabilística entre dos nodos conectados por un arco. Los resultados
+fueron estos:
 
 ##### DAG 3 propuesta
 
@@ -120,7 +139,9 @@ prueba_strength_restricted
 
 ## Prueba de p-value sobre DAG con HC
 
-Resultado del análisis de los valores del BIC y AIC, así como de la prueba arc.strength, se seleccionó la DAG HC con restricciones para analizar si sus relaciones de dependencia son significativas:
+Resultado del análisis de los valores del BIC y AIC, así como de la
+prueba arc.strength, se seleccionó la DAG HC con restricciones para
+analizar si sus relaciones de dependencia son significativas:
 
 ```{r}
 resultados_p_hipotesis = readRDS("objetos/resultados_p_hipótesis.rds")
@@ -130,8 +151,8 @@ resultados_p_hipotesis
 ## Probabilidad de las queries
 
 #### Primer Query
-Probabilidad de que una persona salga de un hospital en Yucatán y que utilice transporte de personal o un automóvil como medio de transporte: $0$
 
+<<<<<<< HEAD
 
 
 
@@ -141,10 +162,36 @@ Probabilidad de que una persona salga de un hospital en Yucatán y que utilice t
 #### Tercer Query
 Probabilidad de que un hombre joven universitario en Jalisco utilice tren ligero durante los días entre semana $0$
 
+=======
+Probabilidad de que una persona salga de un hospital en Yucatán y que
+utilice transporte de personal o un automóvil como medio de transporte:
+$0$
+
+Este resultado se debe a que no hay datos que coincidan de un hospital
+en Yucatán como punto de origen, por lo que el evento no es probable.
+
+#### Segundo Query
+
+Probabilidad de que una persona de 20 años y de sexo femenino use el tren ligero como medio de transporte dado que es de CDMX $0.008258929$
+
+#### Tercera Query
+
+Probabilidad de que un hombre joven universitario en Jalisco utilice
+tren ligero durante los días entre semana $0$
+
+Este resultado se debe a la baja cantidad de datos registrados de viajes
+dentro de Jalisco (solamente 13 registros), lo que genera una
+representatividad insuficiente para capturar esta combinación específica
+de características.
+
+>>>>>>> c5a4fe7d0b1012e002bff92cc392ad76fbe3ed71
 
 #### Cuarto Query
-Probabilidad de que un hombre use un vehículo no motorizado dado que el origen es desde su hogar; escuela; comercio, mercado, tienda o centro comercial; restaurante, bar, cafetería; deportivo, gimnasio; o vía pública $0.2962361$
 
+Probabilidad de que un hombre use un vehículo no motorizado dado que el
+origen es desde su hogar; escuela; comercio, mercado, tienda o centro
+comercial; restaurante, bar, cafetería; deportivo, gimnasio; o vía
+pública $0.2962361$
 
 # Análisis de los resultados
 
@@ -171,14 +218,89 @@ Los resultados se dividieron en dos: las probabilidades diferentes e iguales a $
 Por otro lado, en el caso del query 1, esto se debe a que no existen registros de personas que salgan de un hospital en Yucatán en los datos disponibles. Igualmente, la query tres tuvo un valor nulo, donde la baja cantidad de datos registrados de viajes dentro de Jalisco (solamente 13 registros) es lo que generó una representatividad insuficiente para capturar esta combinación específica de características. En ambos casos, el valor nulo refleja limitaciones de la muestra, y no indican que tales eventos sean improbables.
 
 
+Los resultados muestran diferencias claras en el desempeño de las
+distintas aproximaciones metodológicas utilizadas para construir los
+DAGs. Las tres propuestas iniciales (DAG 1, DAG 2 y DAG 3) obtuvieron
+scores BIC y AIC considerablemente más bajos, con valores que oscilaron
+entre $−7,479,102$ y $−5,819,506$ para BIC, y entre $−6,150,732$ y
+$−5,784,574$ para AIC. Estos puntajes sugieren que los modelos
+planteados manualmente tuvieron un ajuste limitado respecto a la
+estructura real de los datos.
+
+En cambio, el algoritmo de Hill Climbing sin restricciones mostró una
+capacidad de optimización mucho mayor, alcanzando valores notablemente
+mejores ($BIC: −5,586,194; AIC: −5,556,406$). Esta mejora estadística
+indica que el algoritmo logró detectar dependencias en los datos que no
+aparecieron en las propuestas manuales. Sin embargo, al analizar
+cualitativamente la estructura obtenida, se observó un problema
+importante: varias de las relaciones establecidas carecían de sentido en
+el contexto de movilidad urbana, pues planteaban conexiones poco
+plausibles entre variables. Por ejemplo, la variable *sexo* depende de
+la variable *niv* que describe el grado de educación de la persona en el
+registro. Por otro lado, la variable *edad* depende de la variable
+*p5_6* la cual describe el lugar de origen del viaje. Ambas relaciones
+carecen de sentido e interpretabilidad.
+
+Por ello se llevó a cabo la incorporación de restricciones estructurales
+en el Hill Climbing, lo cual representó un punto medio entre la
+optimización estadística y la coherencia teórica. Aunque los scores
+obtenidos ($BIC: −5,603,767; AIC: −5,573,527$) fueron ligeramente más
+bajos que en el modelo sin restricciones, la estructura resultante fue
+mucho más interpretable. Las pruebas con $arc.strength()$ confirmaron
+además la solidez estadística de estas relaciones: todas mostraron
+fortalezas significativas, incluso aquellas con valores muy pequeños,
+como las conexiones entre variables demográficas y patrones de
+movilidad.
+
+De manera complementaria, las pruebas de hipótesis basadas en
+información mutua reforzaron la validez de la DAG con restricciones, ya
+que en todas las relaciones evaluadas se obtuvieron valores de
+$p<2.2×10^{-16}$. Esto confirma que las dependencias identificadas no se
+deben al azar, sino que reflejan patrones reales presentes en los datos
+de movilidad urbana.
+>>>>>>> c5a4fe7d0b1012e002bff92cc392ad76fbe3ed71
+
 # Conclusiones
 
--   Concluir :7
+Este proyecto mostró que la combinación de algoritmos de optimización
+con un previo conocimiento básico es una estrategia efectiva para
+construir redes bayesianas aplicadas al análisis de bases de datos (en
+este caso sobre movilidad urbana). Los resultados confirman que, aunque
+los algoritmos de Hill Climbing logran optimizar métricas estadísticas,
+la inclusión de restricciones en la estructura es esencial para asegurar
+que los modelos resultantes tengan sentido e interpretabilidad.
 
-# Refencias
+Al mismo tiempo, las limitaciones presentes durante la investigación
+dejan aprendizajes importantes para futuros trabajos. La experiencia con
+herramientas de control de versiones, en particular el uso inicial de
+GitHub por parte del equipo, creó algunos retos en la coordinación del
+trabajo colaborativo. Esto muestra la importancia de familiarizarse
+previamente con estas herramientas en proyectos de investigación.
 
-referenciar
+La principal limitación del estudio se relaciona con el alcance
+geográfico de la base de datos, ya que está centrada únicamente en la
+zona metropolitana del Valle de México. Esto redujo la capacidad de
+responder queries sobre otras regiones del país y limitó la posibilidad
+de generalizar los resultados.
 
+Para futuras investigaciones, es recomendable trabajar con bases de
+datos que incluyan mayor diversidad geográfica y demográfica, además de
+dedicar una fase más amplia a conocer el contexto y las características
+de los datos antes de formular queries específicas.
+
+# Referencias
+
+Anthropic. (2024). Claude 3.5 Sonnet \[Large language model\].
+Anthropic. https://claude.ai
+
+INEGI. (2017). Encuesta Origen Destino en Hogares de la Zona
+Metropolitana del Valle de México (EOD) 2017. Instituto Nacional de
+Estadística y Geografía.
+https://www.inegi.org.mx/programas/eod/2017/#datos_abiertos
+
+RCoder. (2024, 2 enero). Exportar datos en R. RCODER.
 https://r-coder.com/exportar-datos-r/
 
-https://www.rdocumentation.org/packages/bnlearn/versions/5.1/topics/arc.strength
+Scutari, M. (2010). Learning Bayesian Networks with the bnlearn R
+Package. Journal of Statistical Software, 35(3), 1-22.
+https://doi.org/10.18637/jss.v035.i03

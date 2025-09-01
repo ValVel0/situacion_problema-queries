@@ -396,20 +396,40 @@ bn = bn.fit(dag_restricted, data = base_df)
 Query 1
 ¿Qué probabilidad hay de que una persona que salga de un hospital en Yucatán haya utilizado un transporte de personal o un automóvil como medio de transporte?
 ```{r}
-prob1 = cpquery(bn,event = (p5_6 == "8" & p5_7_7 == "31"), #Salió de un hospital en Yucatán
-  evidence = (p5_14_01 == "1" | p5_14_19 == "1"), #Utilizó automóvil o transporte de personal
+prob1 = cpquery(bn,event = (p5_14_01 == "1" | p5_14_19 == "1"), #Utilizó automóvil o transporte de personal
+  evidence = (p5_6 == "8" & p5_7_7 == "31"), #Salió de un hospital en Yucatán
   n = 10^6
 )
 cat("Probabilidad de que una persona haya salido de un hospital en Yucatán haya utilizado transporte de personal o automóvil como medio de transporte:", prob1)
 ```
 
 Query 2
-```{r}
 
+¿Cuál es la probabilidad de que una persona de 20 años y de sexo femenino, use el tren ligero como medio de transporte dado que es de CDMX?
+
+Para calcular esta probabilidad, se utilizaron variables directas disponibles en la base de datos. El evento de interés es el uso del tren ligero, representado por la variable p5_14_12 con valor "1" (que indica que sí se utilizó este medio de transporte). La evidencia se compone de tres condiciones: la edad de la persona (20 años), su sexo (femenino) y su ubicación (CDMX). Específicamente:
+
+La edad se captura con la variable edad con valor "20".
+
+El sexo femenino se representa con el valor "2" en la variable sexo.
+
+La CDMX se identifica con el código "09" en la variable ent (entidad).
+
+```{r}
+prob2 = cpquery(
+  bn_mle,
+  event = (p5_14_12 == "1"),
+  evidence = (edad == "20" & sexo == "2" & ent == "09"),
+  n = 10^6
+)
+
+cat("Probabilidad de que una persona de 20 años y de sexo femenino use el tren ligero como medio de transporte dado que es de CDMX:", prob2)
 ```
+ El resultado obtenido indica una probabilidad baja (aproximadamente 0.83%), lo que sugiere que el uso del tren ligero en mujeres de 20 años de la CDMX es relativamente poco común en los datos analizados.
 
 Query 3
 ¿Qué probabilidad hay de que un hombre joven universitario en Jalisco utilice tren ligero durante los días entre semana?
+
 ```{r}
 prob3 = cpquery(
   bn_mle,
